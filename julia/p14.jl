@@ -14,23 +14,29 @@
 
 # Answer: 837799
 
-function collatz(n)
-	terms = 1
+function collatz(n, terms)
+	count, key = 1, n
 	while n != 1
-		n = n%2==0 ? n/2 : 3n+1
-		terms += 1
+		n = n%2==0 ? int(n/2) : int(3n+1)
+		if n in keys(terms)
+			count += terms[n]
+			break
+		end
+		count += 1
 	end
-	return terms
+	terms[key] = count
+	return count, terms
 end
 
-longest_chain = 0
-max_terms = 0
+terms = Dict{Int,Int}()
+longest = 0
+max = 0
 for i = 1:999999
-	terms = collatz(i)
-	if terms > max_terms
-		max_terms = terms
-		longest_chain = i
+	n, terms = collatz(i, terms)
+	if n > max
+		max = n
+		longest = i
 	end
 end
-println("P14=",longest_chain)
+println("P14=",longest)
 
