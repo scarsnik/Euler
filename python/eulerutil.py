@@ -1,5 +1,76 @@
 from math import sqrt
 
+
+def sieve_primeness(limit):
+	'Given an integer limit, this returns a list of Booleans'
+	'where result[k] indicates whether k is a prime number.'
+
+	if limit < 0:
+		raise ValueError("Limit must be non-negative")
+	result = [True] * (limit + 1)
+	result[0] = False
+	if limit > 0:
+		result[1] = False
+	for i in range(2, len(result)):
+		if result[i]:
+			for j in range(i * i, len(result), i):
+				result[j] = False
+	return result
+
+
+def primes(n):
+	'Generator that gives you each prime in order up to some limit n'
+
+	sieve = sieve_primeness(n)
+	enum = enumerate(sieve)
+
+	for i, p in filter(lambda x: x[1], enum):
+		yield i
+
+
+def isqrt(n):  
+    'isqrt(n) Return floor(sqrt(n)).'  
+  
+    if not isinstance(n, int):  
+        raise TypeError('an int is required')  
+    if n < 0:  
+        raise ValueError('math domain error')  
+  
+    guess = (n >> n.bit_length() // 2) + 1  
+    result = (guess + n // guess) // 2  
+    while abs(result - guess) > 1:  
+        guess = result  
+        result = (guess + n // guess) // 2  
+    while result * result > n:  
+        result -= 1  
+    return result
+
+# Get all the proper divisors of a number (n).
+# i.e. all integers less than n that divide n evenly.
+# def proper_divisors(n):
+# 	return {x for x in range(1, (n + 1) // 2 + 1) if n % x == 0 and n != x}
+
+def proper_divisors(n):
+	'Get all the proper divisors of a number (n).'
+	'i.e. all integers less than n that divide n evenly.'
+	
+	divs = [1]
+	if n < 2: 
+		return divs
+
+	iroot = isqrt(n)
+
+	i = 2
+	while i < iroot:
+		if n % i == 0:
+			divs.extend([i, n//i])
+		i += 1
+	if iroot == sqrt(n):
+		divs.append(iroot)
+
+	return divs
+
+
 def is_prime(n):
 	''' CHECK IF N IS A PRIME NUMBER '''
 	
@@ -41,23 +112,7 @@ def sieve_for_primes_to(n):
             sieve[i+val::val] = [0]*tmp
             # print(sieve)
     return [2] + [i*2+1 for i, v in enumerate(sieve) if v and i>0]
-# print(len([2] + [i*2+1 for i, v in enumerate(sieve_for_primes_to(10000000)) if v and i>0]))
 
-# def prime_factors(n):
-# 	''' RETURN A LIST OF PRIME FACTORS OF N '''
-
-# 	if n == 1: return [1]
-# 	prime_factors = []
-
-# 	for p in [2]+list(range(3,int(n**0.5)+1,2)):
-# 		if is_prime(p):
-# 			if p*p > n: break
-# 			while n % p == 0:
-# 				prime_factors.append(p)
-# 				n //= p
-# 	if n > 1: prime_factors.append(n)
-
-# 	return prime_factors
 
 def prime_factors(n):
     """Returns all the prime factors of a positive integer"""
