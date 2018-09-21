@@ -71,6 +71,20 @@ def proper_divisors(n):
 	return divs
 
 
+def is_even(n):
+	return n % 2 == 0
+
+
+
+
+
+
+
+
+
+
+
+
 def is_prime(n):
 	''' CHECK IF N IS A PRIME NUMBER '''
 	
