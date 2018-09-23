@@ -1,4 +1,5 @@
-from math import sqrt
+
+from math import floor, sqrt
 
 
 def sieve_primeness(limit):
@@ -45,39 +46,56 @@ def isqrt(n):
         result -= 1  
     return result
 
-# Get all the proper divisors of a number (n).
-# i.e. all integers less than n that divide n evenly.
-# def proper_divisors(n):
-# 	return {x for x in range(1, (n + 1) // 2 + 1) if n % x == 0 and n != x}
 
 def proper_divisors(n):
 	'Get all the proper divisors of a number (n).'
 	'i.e. all integers less than n that divide n evenly.'
 	
-	divs = [1]
+	divs = {1}
 	if n < 2: 
 		return divs
 
-	iroot = isqrt(n)
+	isqrt = floor(sqrt(n))
 
 	i = 2
-	while i < iroot:
+	while i <= isqrt:
 		if n % i == 0:
-			divs.extend([i, n//i])
+			divs |= {i, n//i}
 		i += 1
-	if iroot == sqrt(n):
-		divs.append(iroot)
 
 	return divs
+
+
+def is_abundant(n):
+	'A number is abundant if the sum of its proper divisors are greater than the number itself'
+	
+	d = proper_divisors(n)
+	return sum(d) > n
 
 
 def is_even(n):
 	return n % 2 == 0
 
 
+def fib(n):
+	'(n)th fibonacci number'
+	phi = (1 + sqrt(5)) / 2
+	num = (phi**n) - ((-phi)**(-n))
+	return int(num / sqrt(5))
 
 
-
+def long_division(n,d):
+	m, r = divmod(n,d)
+	ans, rem = str(m)+".", dict()
+	i = len(ans)
+	while True:
+		if r in rem:
+			ans = ans[:rem[r]] + "(" + ans[rem[r]:] +")"
+			break
+		rem[r] = i
+		m, r = divmod(r*10,d)
+		ans, i = ans+str(m), i+1
+	return ans
 
 
 
@@ -149,18 +167,6 @@ def product(L):
 		n *= i
 	return n
 
-def long_division(n,d):
-	m, r = divmod(n,d)
-	ans, rem = str(m)+".", dict()
-	i = len(ans)
-	while True:
-		if r in rem:
-			ans = ans[:rem[r]] + "(" + ans[rem[r]:] +")"
-			break
-		rem[r] = i
-		m, r = divmod(r*10,d)
-		ans, i = ans+str(m), i+1
-	return ans
 
 def gcd(a,b):
 	return b if a%b==0 else gcd(b,a%b)
