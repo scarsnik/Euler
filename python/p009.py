@@ -6,6 +6,7 @@ https://projecteuler.net/problem=9
 """
 import timing
 from functools import reduce
+from eulerutil import pythagorean_triple
 
 def main():
 	
@@ -18,12 +19,6 @@ def main():
 
 	print(answer)
 
-
-def pythagorean_triple(m, n):
-	a = (m**2) - (n**2)
-	b = 2 * m * n
-	c = (m**2) + (n**2)
-	return a, b, c
 
 if __name__ == '__main__':
     main()

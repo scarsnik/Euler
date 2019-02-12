@@ -19,14 +19,37 @@ def sieve_primeness(limit):
 	return result
 
 
-def primes(n):
+def primes(arg):
 	'Generator that gives you each prime in order up to some limit n'
 
-	sieve = sieve_primeness(n)
+	if type(arg) == list: sieve = arg
+	if type(arg) == int:  sieve = sieve_primeness(arg)
 	enum = enumerate(sieve)
 
 	for i, p in filter(lambda x: x[1], enum):
 		yield i
+
+
+def sieve_omega(limit):
+	' Given an integer limit, this returns a list of integers where result[k]'
+	' is the number of unique prime factors (omega function) of k.'
+	if limit < 0:
+		raise ValueError("Limit must be non-negative")
+	result = [0] * (limit + 1)
+	for i in range(2, len(result)):
+		if result[i] == 0:
+			for j in range(i, len(result), i):
+				result[j] += 1
+	return result
+
+
+def pythagorean_triple(m, n):
+	if n > m:
+		m, n = n, m
+	a = (m**2) - (n**2)
+	b = 2 * m * n
+	c = (m**2) + (n**2)
+	return a, b, c
 
 
 def isqrt(n):  
@@ -73,8 +96,39 @@ def is_abundant(n):
 	return sum(d) > n
 
 
-def is_even(n):
+def even(n):
 	return n % 2 == 0
+
+def odd(n):
+	return n % 2 != 0
+
+def gcd(a, b):
+	return b if a % b == 0 else gcd(b, a % b)
+
+def lcm(a, b):
+	return a * b / gcd(a, b)
+
+
+def rotate(s):
+	'Generator that gives you the rotations of a string'
+	a = list(s)
+	for i in a:
+		a.insert(0, a.pop())
+		yield ''.join(a)
+
+
+def is_palindrome(s):
+	return ''.join(reversed(s)) == s
+
+def is_pandigital(n, digits):
+	return ''.join(sorted(n)) == digits
+
+
+def letter_value(a):
+	return ord(a.lower()) - 96
+
+
+
 
 
 def fib(n):
@@ -84,10 +138,11 @@ def fib(n):
 	return int(num / sqrt(5))
 
 
-def long_division(n,d):
-	m, r = divmod(n,d)
-	ans, rem = str(m)+".", dict()
+def long_division(n, d):
+	m, r = divmod(n, d)
+	ans, rem = str(m) + ".", dict()
 	i = len(ans)
+	
 	while True:
 		if r in rem:
 			ans = ans[:rem[r]] + "(" + ans[rem[r]:] +")"
@@ -106,10 +161,20 @@ def long_division(n,d):
 def is_prime(n):
 	''' CHECK IF N IS A PRIME NUMBER '''
 	
-	if n == 2 or n == 3: return True
-	if n < 2 or n % 2 == 0 or n % 3 == 0: return False
-	if n < 9: return True
-
+	if n <= 1: return False
+	if n == 2: return True
+	if n == 3: return True
+	if n % 2 == 0: return False
+	if n % 3 == 0: return False
+	if n == 7: return True
+	
+	# i = 5
+	# w = 2
+	# while i * i <= n:
+	# 	if n % i == 0:
+	# 		return False
+	# 	i += w
+	# 	w = 6 - w
 	f = 5
 	while f <= int(n**0.5):
 		if n % f == 0 or n % (f + 2) == 0:
@@ -117,6 +182,7 @@ def is_prime(n):
 		else:
 			f += 6
 	return True
+
 
 def prime_sieve(limit):
 	''' RETURN A LIST OF PRIMES UP TO LIMIT '''
@@ -167,16 +233,6 @@ def product(L):
 		n *= i
 	return n
 
-
-def gcd(a,b):
-	return b if a%b==0 else gcd(b,a%b)
-
-def lcm(a,b):
-	return a*b/gcd(a,b)
-
-def is_pandigital(num_list,digits):
-	s = sorted(''.join([str(x) for x in num_list]))
-	return ''.join(s) == digits
 
 def tri(n):
 	return n*(n+1)/2

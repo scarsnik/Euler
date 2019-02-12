@@ -27,9 +27,9 @@ diff_matrix = dict()
 for p in primes:
 	for q in primes-{p}:
 		if (tuple(diff(p,q))) in diff_matrix:
- 			diff_matrix[tuple(diff(p,q))] |= {p,q}
- 		else:
- 			diff_matrix[tuple(diff(p,q))] = {p,q}
+			diff_matrix[tuple(diff(p,q))] |= {p,q}
+		else:
+			diff_matrix[tuple(diff(p,q))] = {p,q}
 
 for x in diff_matrix:
 	if len(diff_matrix[x])==8:
