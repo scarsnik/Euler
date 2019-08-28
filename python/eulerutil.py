@@ -1,6 +1,47 @@
 
 from math import floor, sqrt
+from functools import reduce
+from collections import Counter
 
+
+def divisorGen(n):
+    facts = list(factors(n, as_list=False))
+    nfactors = len(facts)
+    f = [0] * nfactors
+    while True:
+        yield reduce(lambda x, y: x*y, [facts[x][0]**f[x] for x in range(nfactors)], 1)
+        i = 0
+        while True:
+            f[i] += 1
+            if f[i] <= facts[i][1]:
+                break
+            f[i] = 0
+            i += 1
+            if i >= nfactors:
+                return
+
+
+def factors(n, as_tuple=True):
+    # Returns the prime factors of n
+    # as_list:
+    #     True - gives the output as a list of primes
+    #     False - gives a list of tuples, each tuple is (prime, multiplicity)
+    
+    step = lambda x: 1 + (x<<2) - ((x>>1)<<1)
+    maxq = int(floor(sqrt(n)))
+    d = 1
+    q = n % 2 == 0 and 2 or 3 
+    while q <= maxq and n % q != 0:
+        q = step(d)
+        d += 1
+    output = q <= maxq and [q] + factors(n//q, False) or [n]
+    
+    if as_tuple:
+        counts = Counter(output)
+        return list(zip(counts.keys(), counts.values()))
+    else:
+        return output
+        
 
 def sieve_primeness(limit):
 	'Given an integer limit, this returns a list of Booleans'
